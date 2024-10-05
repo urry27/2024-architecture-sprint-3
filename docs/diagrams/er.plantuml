@@ -1,0 +1,47 @@
+@startuml
+title ER Diagram for Smart Home Domain
+
+entity "Телеметрия" as telemetry {
+  * id : UUID
+  * control_module_id : UUID
+  * device_id : UUID
+  * data : String
+}
+
+entity "Устройство" as device {
+  * id : UUID
+  * device_type : String
+  * place_id : UUID
+  * state : String
+  * access_data : String
+  * isConnected : Boolean
+}
+
+entity "Пользователь" as user {
+  * id : UUID
+  * name : String
+  * place_id : UUID
+}
+
+entity "Дом" as place {
+  * id : UUID
+  * name : String
+  * owner_id : UUID
+}
+
+entity "Сценарий" as scenario {
+  * id : UUID
+  * device_id : UUID
+  * trigger : String
+  * description : String
+  * done : Boolean
+}
+
+' Relationships
+
+user ||--o{ place : "владеет"
+place ||--o{ user : "жильцы"
+place ||--o{ device : "содержит"
+device ||--o{ telemetry : "содержит"
+device ||--o{ scenario : "используется в"
+@enduml

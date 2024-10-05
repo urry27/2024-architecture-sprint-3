@@ -1,0 +1,15 @@
+@startuml
+title Heating Control Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(HeatingControl, "Heating Control", "Java, Spring Boot", "Управляет системой отопления: включение, выключение, установка температуры")
+}
+
+Container(HeatingControl, "Heating Control", "Java, Spring Boot") {
+  Component(HeatingController, "Heating Controller", "Принимает команды управления системой отопления")
+}
+@enduml

@@ -1,0 +1,78 @@
+asyncapi: '2.0.0'
+info:
+  title: Device Management Async API
+  version: '1.0.0'
+  description: |
+    API для асинхронного взаимодействия с сервисом управления устройствами. 
+    Поддерживаются события создания устройства и запросы на изменение состояния устройства.
+
+channels:
+  device-management.device:
+    description: Топик для обмена событиями устройства в сервисе управления устройствами
+    subscribe:
+      summary: Подписка на события устройства
+      message:
+        oneOf:
+          - $ref: '#/components/messages/DeviceCreated'
+          - $ref: '#/components/messages/DeviceStateChangeRequested'
+
+components:
+  messages:
+    DeviceCreated:
+      name: DeviceCreated
+      title: Device Created Event
+      summary: Событие создания нового устройства
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DeviceCreatedPayload'
+
+    DeviceStateChangeRequested:
+      name: DeviceStateChangeRequested
+      title: Device State Change Requested Event
+      summary: Событие запроса на изменение состояния устройства
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/DeviceStateChangeRequestedPayload'
+
+  schemas:
+    DeviceCreatedPayload:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Уникальный идентификатор события
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        occured_at:
+          type: string
+          format: date-time
+          description: Время события
+          example: '2024-10-03T12:34:56Z'
+        device_id:
+          type: string
+          description: Идентификатор созданного устройства
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        access_data:
+          type: string
+          description: Данне для подключения к устройству
+          example:
+            "ip_address": "192.168.1.100"
+            "port": 8080
+            "protocol": "https"
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    DeviceStateChangeRequestedPayload:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Уникальный идентификатор события
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        device_id:
+          type: string
+          description: Идентификатор устройства, для которого запрашивается изменение состояния
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        requested_state:
+          type: string
+          description: Запрашиваемое состояние устройства (например, on, off)
+          example:
+            "isOn": true

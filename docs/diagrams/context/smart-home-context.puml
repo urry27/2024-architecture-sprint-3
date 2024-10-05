@@ -1,0 +1,15 @@
+@startuml
+title Диаграмма контекста Умного Дома
+
+top to bottom direction
+
+!include C4_Context.puml
+
+System(SmartHomeSystem, "Умный дом", "Система для управления устройствами умного дома")
+
+Person_Ext(user, "Пользователь", "Пользователь умного дома")
+System_Ext(device, "Устройство", "Внешнее устройство умного дома")
+
+Rel(user, SmartHomeSystem, "Использует")
+Rel(device, SmartHomeSystem, "Подключаются к")
+@enduml

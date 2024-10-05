@@ -1,0 +1,20 @@
+@startuml
+title Device Telemetry Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(DeviceTelemetry, "Device Telemetry", "Java, Spring Boot", "Сбор телеметрии с устройств: статусы, данные")
+}
+
+Container(DeviceTelemetry, "Device Telemetry", "Java, Spring Boot") {
+  Component(TelemetryCollector, "Telemetry Collector", "Собирает данные телеметрии с подключённых устройств")
+  Component(DataNormalizer, "Data Normalizer", "Нормализует данные телеметрии для единообразного хранения")
+  Component(EventManager, "Event Manager", "Отправляет полученные данные как события")
+}
+
+Rel(TelemetryCollector, DataNormalizer, "Передает данные для нормализации")
+Rel(DataNormalizer, EventManager, "Отправляет нормализованные данные событиями")
+@enduml

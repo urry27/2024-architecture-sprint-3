@@ -1,0 +1,15 @@
+@startuml
+title Gate Control Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(GateControl, "Gate Control", "Java, Spring Boot", "Управление воротами: открытие и закрытие")
+}
+
+Container(GateControl, "Gate Control", "Java, Spring Boot") {
+  Component(GateController, "Gate Controller", "Управляет открытием и закрытием ворот")
+}
+@enduml

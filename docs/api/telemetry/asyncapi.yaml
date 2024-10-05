@@ -1,0 +1,54 @@
+asyncapi: '2.0.0'
+info:
+  title: Smart Home Telemetry API
+  version: '1.0.0'
+  description: |
+    API для сбора телеметрии умного дома. События выбрасываются при сборе данных телеметрии с устройств через модули управления.
+
+
+channels:
+  telemetry.data:
+    description: Топик для публикации событий телеметрии
+    subscribe:
+      summary: Подписка на события телеметрии
+      operationId: dataReceived
+      message:
+        $ref: '#/components/messages/DataReceived'
+
+components:
+  messages:
+    DataReceived:
+      name: DataReceived
+      title: Data Received
+      summary: Событие, содержащее собранные данные телеметрии
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/TelemetryData'
+
+  schemas:
+    TelemetryData:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Уникальный идентификатор события
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        occured_at:
+          type: string
+          format: date-time
+          description: Время возникновения события
+          example: '2024-10-03T12:34:56Z'
+        control_module_id:
+          type: string
+          description: Идентификатор модуля управления
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        device_id:
+          type: string
+          description: Идентификатор устройства, с которого были собраны данные
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        data:
+          type: string
+          description: Данные, собранные с устройства
+          example: 
+            temperature: 22.5
+            isOn: true
