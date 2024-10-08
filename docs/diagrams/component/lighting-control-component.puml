@@ -1,0 +1,15 @@
+@startuml
+title Lighting Control Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(LightingControl, "Lighting Control", "Java, Spring Boot", "Управляет освещением: включение и выключение света")
+}
+
+Container(LightingControl, "Lighting Control", "Java, Spring Boot") {
+  Component(LightingController, "Lighting Controller", "Управляет включением и выключением света")
+}
+@enduml

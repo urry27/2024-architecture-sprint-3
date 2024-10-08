@@ -1,0 +1,18 @@
+@startuml
+title API Gateway Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(APIGateway, "API Gateway", "Kusk", "Маршрутизирует запросы на микросервисы")
+}
+
+Container(APIGateway, "API Gateway", "Kusk") {
+  Component(AuthFilter, "Auth Filter", "Проверяет аутентификацию и авторизацию запросов")
+  Component(RoutingEngine, "Routing Engine", "Маршрутизирует запросы на соответствующие микросервисы")
+}
+
+Rel(AuthFilter, RoutingEngine, "Проверяет и передает запросы на")
+@enduml

@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: Device Management API
+  version: '1.0.0'
+  description: |
+    API для управления устройствами в системе умного дома.
+
+paths:
+  /devices:
+    post:
+      summary: Создать устройство
+      description: Создание нового устройства
+      operationId: createDevice
+      requestBody:
+        description: Информация о создаваемом устройстве
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Устройство 1"
+                device_type:
+                  type: string
+                  example: "lighting"
+                place_id:
+                  type: string
+                  example: "9d4969d9-a72b-4346-ac2e-e87dc5872876"
+                access_data:
+                  type: string
+                  example:
+                    "ip_address": "192.168.1.100"
+                    "port": 8080
+                    "protocol": "https"
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              required:
+                - name
+                - device_type
+                - place_id
+                - access_data
+      responses:
+        '201':
+          description: Устройство успешно создано
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "9d4969d9-a72b-4346-ac2e-e87dc5872876"
+                  name:
+                    type: string
+                    example: "Устройство 1"
+                  device_type:
+                    type: string
+                    example: "lighting"
+                  place_id:
+                    type: string
+                    example: "9d4969d9-a72b-4346-ac2e-e87dc5872876"
+                  access_data:
+                    type: string
+                    example:
+                      "ip_address": "192.168.1.100"
+                      "port": 8080
+                      "protocol": "https"
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Неверные данные
+        '500':
+          description: Ошибка сервера
+
+  /devices/{id}:
+    get:
+      summary: Получить информацию об устройстве
+      description: Получение информации о конкретном устройстве по его идентификатору.
+      operationId: getDevice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор устройства
+          schema:
+            type: string
+            example: "9d4969d9-a72b-4346-ac2e-e87dc5872876"
+           
+      responses:
+        '200':
+          description: Информация об устройстве
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  name:
+                    type: string
+                    example: "Устройство 1"
+                  device_type:
+                    type: string
+                    example: "lighting"
+                  place_id:
+                    type: string
+                    example: "9d4969d9-a72b-4346-ac2e-e87dc5872876"
+                  isConnected:
+                    type: boolean
+                    example: true
+                  state:
+                    type: string
+                    example:
+                      isOn: true
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
+
+    put:
+      summary: Изменить состояние устройства
+      description: Изменение состояния устройства
+      operationId: updateDeviceState
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор устройства
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        description: Новое состояние устройства
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  description: Новое состояние устройства
+                  example:
+                    isOn: true
+              required:
+                - state
+      responses:
+        '200':
+          description: Состояние устройства успешно обновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Состояние устройства обновлено"
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
+
+  /devices/{id}/connect:
+    post:
+      summary: Подключить устройство
+      description: Подключение устройства к системе
+      operationId: connectDevice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор устройства
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Устройство успешно подключено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Устройство подключено"
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
+
+  /devices/{id}/disconnect:
+    post:
+      summary: Отключить устройство
+      description: Отключение устройства от системы
+      operationId: disconnectDevice
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор устройства
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Устройство успешно отключено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Устройство отключено"
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
+
+  /devices/{id}/scenario:
+    post:
+      summary: Задать сценарий для устройства
+      description: Задание сценария для устройства, например, автоматизация по времени или триггеру.
+      operationId: setScenario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор устройства
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        description: Информация о сценарии
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trigger:
+                  type: string
+                  example: "2024-10-03T12:34:56Z"
+                action:
+                  type: string
+                  example: "turn on"
+              required:
+                - trigger
+                - action
+      responses:
+        '200':
+          description: Сценарий успешно задан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Сценарий задан"
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера

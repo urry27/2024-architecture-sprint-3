@@ -1,0 +1,54 @@
+@startuml
+title Smart Home Container Diagram
+
+top to bottom direction
+
+!include C4_Container.puml
+!include C4_Context.puml
+
+System(SmartHomeSystem, "Умный дом", "Система управления устройствами и телеметрией")
+
+Person_Ext(user, "Пользователь", "Пользователь умного дома")
+System_Ext(device, "Устройство", "Внешнее устройство умного дома")
+
+System_Boundary(SmartHomeSystem, "Система умного дома") {
+
+
+  Container(APIGateway, "API Gateway", "Kusk", "Маршрутизирует запросы на микросервисы")
+  Container(DeviceGateway, "Device Gateway", "Kusk", "Маршрутизирует запросы на устройства")
+
+  Container(Kafka, "Kafka", "Apache Kafka", "Для асинхронного взаимодействия")
+
+  Container(DeviceManagement, "Device Management", "Java, Spring Boot", "Управляет подключением и отключением устройств, автоматизацией сценариев")
+
+  System_Boundary(ControlServices, "Контексты управления устройствами") {
+    Container(HeatingControl, "Heating Control", "Java, Spring Boot", "Управляет системой отопления: включение, выключение, установка температуры")
+    Container(SurveillanceControl, "Surveillance Control", "Java, Spring Boot", "Управление системой наблюдения за домом")
+    Container(GateControl, "Gate Control", "Java, Spring Boot", "Управляет воротами: открытие и закрытие")
+    Container(LightingControl, "Lighting Control", "Java, Spring Boot", "Управляет освещением: включение и выключение света")
+  }
+
+  Container(DeviceTelemetry, "Device Telemetry", "Java, Spring Boot", "Сбор телеметрии с устройств: статусы, данные")
+}
+
+Rel(user, SmartHomeSystem, "Использует")
+Rel(device, APIGateway, "Посылает запросы через")
+Rel(DeviceGateway, device, "Посылает запросы на")
+
+Rel(APIGateway, DeviceManagement, "Маршрутизирует запросы")
+Rel(APIGateway, DeviceTelemetry, "Маршрутизирует запросы")
+Rel(APIGateway, SurveillanceControl, "Маршрутизирует запросы")
+
+Rel(APIGateway, Kafka, "Читает сообщения")
+
+Rel(DeviceManagement, Kafka, "Публикует и читает сообщения")
+Rel(HeatingControl, Kafka, "Публикует и читает сообщения")
+Rel(SurveillanceControl, Kafka, "Публикует и читает сообщения")
+Rel(GateControl, Kafka, "Публикует и читает сообщения")
+Rel(LightingControl, Kafka, "Публикует и читает сообщения")
+
+Rel(DeviceTelemetry, Kafka, "Пишет сообщения")
+
+Rel(ControlServices, DeviceGateway, "Посылают запросы через")
+Rel(DeviceTelemetry, DeviceGateway, "Посылает запросы через")
+@enduml

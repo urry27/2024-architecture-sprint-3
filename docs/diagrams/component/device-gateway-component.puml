@@ -1,0 +1,23 @@
+@startuml
+title Device Gateway Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(DeviceGateway, "Device Gateway", "Kusk", "Посредник между микросервисами и физическими устройствами")
+}
+
+Container(DeviceGateway, "Device Gateway", "Kusk") {
+  Component(CommandTranslator, "Command Translator", "Преобразует команды микросервисов в команды для устройств")
+  Component(CommuticationManager, "Commutication Manager", "Отправляет команду устройству")
+  Component(AccessDataStorage, "Access Data Storage", "Хранит данные для доступа к устройству")
+  Component(ProtocolStorage, "Protocol Storage", "Хранит протоколы взаимодействия с устройствами")
+  Component(ScheduleManager, "Schedule Manager", "Управляет расписанием")
+}
+
+Rel(CommuticationManager, AccessDataStorage, "Использует данные")
+Rel(CommuticationManager, CommandTranslator, "Использует преобразование")
+Rel(CommandTranslator, ProtocolStorage, "Использует протоколы для взаимодействия с устройствами")
+@enduml

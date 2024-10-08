@@ -1,0 +1,15 @@
+@startuml
+title Surveillance Control Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(SmartHomeSystem, "Система умного дома") {
+  Container(SurveillanceControl, "Surveillance Control", "Java, Spring Boot", "Управление системой наблюдения за домом")
+}
+
+Container(SurveillanceControl, "Surveillance Control", "Java, Spring Boot") {
+  Component(CameraController, "Camera Controller", "Управляет камерами наблюдения")
+}
+@enduml
